@@ -1,4 +1,4 @@
-Chapter 5 mostly covers the binomial and Poisson distributions, and briefly mentions hypergeometric, multinomial, negative binomial, and logarithmic.  
+#Chapter 5 mostly covers the binomial and Poisson distributions, and briefly mentions hypergeometric, multinomial, negative binomial, and logarithmic.  
 
 #Section 5.1
 #This section talks about probability theory, unions, intersections, independence,
@@ -6,19 +6,30 @@ Chapter 5 mostly covers the binomial and Poisson distributions, and briefly ment
 
 #Section 5.2: the binomial distribution
 ?Distributions #to see distributions available in 'stats'.
-?dbinom
+?dbinom #to see what you can do with binomial distribution in particular.
 
+#Let's generate table 5.1 and figure 5.2 (bar graph side by side).
 
-#Let's generate table 5.1, figure 5.2 (bar graph side by side).
-#equation 5.9 by hand using factorial() 
-#to population a table with coefficients and powers of p and q (3 and 4 in table)
+#You can get the binomial coefficient equation 5.9 by hand using factorial() 
+#For example on page 71 in table 5.1, they give an example of a sample of 5 containing 2 of the infected insects.
+#to population a table with coefficients and powers of p and q (columns 3 and 4 in table)
+factorial(5)/(factorial(2)*factorial(5-2))
+#Yes, this gives us 10 just like in table 5.1, column 2, for 2 infected insects.
 
-#Then use 
-choose(n=, #n is the size of the sample.  "k"
-       k=) #k is the place in the coefficient, starting at 0 (number infected, number whatever) "Y"
+#You can do this more simply using the choose() function.
+#Beware the different use of k.
+choose(n=5, #n is the size of the sample.  "k"
+       k=2) #k is the place in the coefficient, starting at 0 (number infected, number whatever) "Y"
 
-#get relative expected frequencies (5) with pbinom
-http://www.r-tutor.com/elementary-statistics/probability-distributions/binomial-distribution
+#To get the values in column 3 and 4 of table 5.1, except for the power of 0, which is 1 and not calculated here.
+poly(0.4, degree=5, raw=T)
+poly(0.6, degree=5, raw=T)
+#You will note taht the numbers for 0.6 (powers of q) are reversed in column 4.
+#When you note that the number of uninfected insects per sample will be just opposite of infected insects (in column 1)
+#this makes more sense.
+
+#To get the relative expected frequencies (column 5), use dbinom and pbinom
+#http://www.r-tutor.com/elementary-statistics/probability-distributions/binomial-distribution
 
 dbinom(c(0,1,2,3,4,5), size=5, prob=0.4)
 #density is book's relative frequencies.

@@ -9,6 +9,7 @@
 ?dbinom #to see what you can do with binomial distribution in particular.
 
 #Let's generate table 5.1 and figure 5.2 (bar graph side by side).
+#The remaining tables in section 5.2 would use similar code.
 
 #You can get the binomial coefficient equation 5.9 by hand using factorial() 
 #For example on page 71 in table 5.1, they give an example of a sample of 5 containing 2 of the infected insects.
@@ -17,9 +18,9 @@ factorial(5)/(factorial(2)*factorial(5-2))
 #Yes, this gives us 10 just like in table 5.1, column 2, for 2 infected insects.
 
 #You can do this more simply using the choose() function.
-#Beware the different use of k.
-choose(n=5, #n is the size of the sample.  "k"
-       k=2) #k is the place in the coefficient, starting at 0 (number infected, number whatever) "Y"
+#Beware the different use of k in the R function versus the book.
+choose(n=5, #n is the size of the sample.  "k" in book.
+       k=2) #k is the place in the coefficient, starting at 0 (number infected, number whatever); "Y" in book.
 
 #To get the values in column 3 and 4 of table 5.1, except for the power of 0, which is 1 and not calculated here.
 poly(0.4, degree=5, raw=T)
@@ -28,17 +29,18 @@ poly(0.6, degree=5, raw=T)
 #When you note that the number of uninfected insects per sample will be just opposite of infected insects (in column 1)
 #this makes more sense.
 
-#To get the relative expected frequencies (column 5), use dbinom and pbinom
+#To get the relative expected frequencies (column 5), use dbinom and pbinom.
 #http://www.r-tutor.com/elementary-statistics/probability-distributions/binomial-distribution
 
 (rel.expected.freq<-dbinom(c(0,1,2,3,4,5), size=5, prob=0.4))
 #density is book's relative frequencies.
-pbinom(c(0,1,2,3,4,5), size=5, prob=0.4)
+(pbinom(c(0,1,2,3,4,5), size=5, prob=0.4))
 #to contrast, this adds up the densities/relative frequencies.
 
 #To get column 6, the absolute expected frequencies, multiply rel.expected.freq by the actual sample size.
 (abs.expected.freq<-2423*rel.expected.freq)
 
+#Now we'll use the abs.expected.freq plus the observed frequencies together to make a side-by-side barplot.
 obs.freq<-c(202,
             643,
             817,
@@ -51,7 +53,11 @@ infected.freq<-rbind(obs.freq,
 colnames(infected.freq)<-0:5
 rownames(infected.freq)<-c("Observed frequencies",
                            "Expected frequencies")
+#Adding colnames and rownames gives the proper legend and x axis labels in the plot.
 
+#If you want to make a side-by-side barplot,
+#you need adjacent columns, the barplot() function,
+#and to specify beside=TRUE.
 barplot(infected.freq,
         beside = TRUE,
         ylab="Frequency",

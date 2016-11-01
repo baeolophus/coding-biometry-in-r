@@ -31,7 +31,31 @@ poly(0.6, degree=5, raw=T)
 #To get the relative expected frequencies (column 5), use dbinom and pbinom
 #http://www.r-tutor.com/elementary-statistics/probability-distributions/binomial-distribution
 
-dbinom(c(0,1,2,3,4,5), size=5, prob=0.4)
+(rel.expected.freq<-dbinom(c(0,1,2,3,4,5), size=5, prob=0.4))
 #density is book's relative frequencies.
 pbinom(c(0,1,2,3,4,5), size=5, prob=0.4)
 #to contrast, this adds up the densities/relative frequencies.
+
+#To get column 6, the absolute expected frequencies, multiply rel.expected.freq by the actual sample size.
+(abs.expected.freq<-2423*rel.expected.freq)
+
+obs.freq<-c(202,
+            643,
+            817,
+            535,
+            197,
+            29)
+
+infected.freq<-rbind(obs.freq,
+                 abs.expected.freq)
+colnames(infected.freq)<-0:5
+rownames(infected.freq)<-c("Observed frequencies",
+                           "Expected frequencies")
+
+barplot(infected.freq,
+        beside = TRUE,
+        ylab="Frequency",
+        xlab="Number of infected insects per sample",
+        axes=TRUE,
+        legend.text = TRUE,
+        args.legend=c(bty="n"))

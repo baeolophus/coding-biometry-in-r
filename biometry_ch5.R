@@ -65,3 +65,31 @@ barplot(infected.freq,
         axes=TRUE,
         legend.text = TRUE,
         args.legend=c(bty="n"))
+
+#Section 5.3: the Poisson distribution
+?Distributions #Let's look in help again to find the Poisson distribution.
+?dpois #We can see that R does similar calculations for Poisson in addition to the binomial distribution.
+
+#To get column 3 (expected absolute frequencies) in table 5.5,
+#there is the recursion formula given in equations 5.11 and 5.12.
+#5.12 is for calculations with sample means to get the relative expected frequency,
+#and in the text below it notes what term to add to get the absolute ones given in column 3 of table 5.5
+
+abs.expected.freq.pois<-400*dpois(c(0:9),
+                                  lambda=1.8,
+                                  log=FALSE)
+
+#To do equation 5.12 manually for relative expected frequencies
+#This is not normally needed because R does it so nicely with the base stats function,
+#but I wanted to learn how to code the recursive formula,
+#and the whole point of going through the whole book here is of course to improve my R code and learn.
+
+#Some reading:
+#http://stackoverflow.com/questions/5273857/are-recursive-functions-used-in-r
+
+rel.exp.freq.pois<-function(samplemean) {
+  
+  frequency0=exp(-samplemean)
+  frequencyi=frequency(i-1) * (samplemean/i)
+  #I think this needs to be a loop through a list?
+}

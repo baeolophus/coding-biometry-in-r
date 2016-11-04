@@ -86,10 +86,21 @@ abs.expected.freq.pois<-400*dpois(c(0:9),
 
 #Some reading:
 #http://stackoverflow.com/questions/5273857/are-recursive-functions-used-in-r
+#this one has a simple one for factorials that makes it clearest to me:
+#http://www.programiz.com/r-programming/recursion
 
-rel.exp.freq.pois<-function(samplemean) {
-  
-  frequency0=exp(-samplemean)
-  frequencyi=frequency(i-1) * (samplemean/i)
-  #I think this needs to be a loop through a list?
+rel.exp.freq.pois<-function(samplemean, i) {
+  if (i==0) return (exp(-samplemean))
+  else      return (rel.exp.freq.pois(samplemean,
+                                      i-1)*(samplemean/i))
 }
+
+#To get absolute frequencies, multiply by 400.
+#For one example:
+400*rel.exp.freq.pois(1.8, 1)
+
+#To get all the frequencies at once, use lapply.
+rel.freq.pois<-unlist(lapply(c(0:9),
+                                     rel.exp.freq.pois,
+                                     samplemean=1.8))
+(abs.freq.pois<-400*rel.freq.pois)

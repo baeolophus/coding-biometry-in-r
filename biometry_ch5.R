@@ -104,3 +104,32 @@ rel.freq.pois<-unlist(lapply(c(0:9),
                                      rel.exp.freq.pois,
                                      samplemean=1.8))
 (abs.freq.pois<-400*rel.freq.pois)
+
+#On page 82, they show how to calculate the coefficient of dispersion.  Here is a function that will do it.
+coefficient.of.dispersion<-function(data) {
+  var(data)/mean(data)
+}
+
+#Figure 5.3
+plot(dpois(c(0:18),
+      lambda=0.1,
+      log=FALSE),
+     type="l",
+     ylab="Relative expected frequency",
+     xlab="Number of rare events per sample")
+points(dpois(c(0:18),
+           lambda=1,
+           log=FALSE),
+       type="l")
+points(dpois(c(0:18),
+             lambda=2,
+             log=FALSE),
+       type="l")
+points(dpois(c(0:18),
+             lambda=3,
+             log=FALSE),
+       type="l")
+points(dpois(c(0:18),
+             lambda=10,
+             log=FALSE),
+       type="l")

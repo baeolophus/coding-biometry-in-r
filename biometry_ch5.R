@@ -79,10 +79,8 @@ abs.expected.freq.pois<-400*dpois(c(0:9),
                                   lambda=1.8,
                                   log=FALSE)
 
-#To do equation 5.12 manually for relative expected frequencies
-#This is not normally needed because R does it so nicely with the base stats function,
-#but I wanted to learn how to code the recursive formula,
-#and the whole point of going through the whole book here is of course to improve my R code and learn.
+#I also want to do equation 5.12 manually for relative expected frequencies.
+#This is not normally needed because R does it so nicely with the base stats function dpois().
 
 #Some reading:
 #http://stackoverflow.com/questions/5273857/are-recursive-functions-used-in-r
@@ -109,8 +107,12 @@ rel.freq.pois<-unlist(lapply(c(0:9),
 coefficient.of.dispersion<-function(data) {
   var(data)/mean(data)
 }
+#You can input any set of data here and get the coefficient of dispersion.
 
-#Figure 5.3
+#Figure 5.3 shows Poisson distributions with different means.
+#We can make this with the dpois() function generating y data.
+#Oddly, to add the extra lines, it is easiest to use points() with 
+#type="l" (for lines).
 plot(dpois(c(0:18),
       lambda=0.1,
       log=FALSE),
@@ -133,3 +135,5 @@ points(dpois(c(0:18),
              lambda=10,
              log=FALSE),
        type="l")
+
+#The remaining tables and examples in this section do not add anything new to code.

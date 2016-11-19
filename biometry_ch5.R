@@ -137,3 +137,56 @@ points(dpois(c(0:18),
        type="l")
 
 #The remaining tables and examples in this section do not add anything new to code.
+
+#Section 5.4 Other Discrete Probability Distributions
+?dhyper #hypergeometric
+?dmultinom #multinomial
+?dnbinom #negative binomial
+#There are also options in various packages later for regression to use different distributions,
+#although of these I've only ever used negative binomial.
+
+#The logarithmic distribution requires an extra package.
+#https://cran.r-project.org/web/views/Distributions.html
+#extraDistr, VGAM, or gamlss.dst
+#I installed extraDistr to test it out.
+library(extraDistr)
+?LogSeries
+#and
+?dlgser #The distributions in this package follow the same us of d, p, and q prefixes.
+
+
+
+#Exercises 5
+#I'm doing the exercises that require new coding beyond what we have done already.
+#A few were easier to do with paper and pencil first (the ones involving basic probability).
+
+#Exercise 5.5
+#I think this is a binomial problem.
+#The organism is present or absent, assuming the person is diseased.  We want a false negative
+#<1% of the time.  The organism is visible in 20% of the time.
+#At first I thought this was a Bayesian problem but I don't see how to do it that way.
+#p=0.2 (organism visible), thus q=0.8 (organism visible but not present).
+#We need to find the power of q=0.8 that equals 0.01 or smaller (1% false negative).
+#This helped: http://www2.warwick.ac.uk/fac/sci/moac/degrees/moac/ch923/r_introduction/r_programming/
+
+n<-0
+i<-1
+print(n)
+while (i > 0.01) {
+  print(i)
+  print(n)
+     i<-0.8^n
+     n=n+1
+       0.8^21
+   }
+
+#need to get table 5.1 but for 0 the power of p or q should be 0.01, not sure which.
+#Exercise 5.6
+#a
+#b
+#c
+#d
+
+#Exercise 5.10
+
+#Exercise 5.11

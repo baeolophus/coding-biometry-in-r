@@ -138,7 +138,7 @@ points(dpois(c(0:18),
 
 #The remaining tables and examples in this section do not add anything new to code.
 
-#Section 5.4 Other Discrete Probability Distributions
+#Section 5.4: Other Discrete Probability Distributions
 ?dhyper #hypergeometric
 ?dmultinom #multinomial
 ?dnbinom #negative binomial
@@ -155,19 +155,19 @@ library(extraDistr)
 ?dlgser #The distributions in this package follow the same us of d, p, and q prefixes.
 
 
-
 #Exercises 5
 #I'm doing the exercises that require new coding beyond what we have done already.
-#A few were easier to do with paper and pencil first (the ones involving basic probability).
 
 #Exercise 5.5
 #The organism is present or absent in any given slide, assuming the person is diseased
-#(if the person has the d.  We want a false negative
-#<1% of the time.  The organism is visible in 20% of the time.
+#(if the person has the disease, their samples contain the organism but it's not very common).
+#We want a false negative <1% of the time.  The organism is visible in 20% of the slides.
 #At first I thought this was a Bayesian problem but I don't see how to do it that way.
-#p=0.2 (organism visible), thus q=0.8 (organism visible but not present).
-#We need to find the power of q=0.8 that equals 0.01 or smaller (1% false negative).
-#This helped: http://www2.warwick.ac.uk/fac/sci/moac/degrees/moac/ch923/r_introduction/r_programming/
+#p=0.2 (organism visible), thus q=0.8 (organism present but not visible).
+#We need to find the power of q=0.8 that equals 0.01 or smaller
+#(1% false negative, which would be present but not visible).
+#So, I made a while loop that cycled through to see how many times we need to raise 0.8
+#to get to 0.01.  This helped: http://www2.warwick.ac.uk/fac/sci/moac/degrees/moac/ch923/r_introduction/r_programming/
 
 n<-0
 i<-1
@@ -177,9 +177,5 @@ while (i > 0.01) {
   print(n)
      i<-0.8^n
      n=n+1
-       0.8^21
-   }
-
-#Exercise 5.10
-
-#Exercise 5.11
+}
+#the last number printed is the number of slides needed.

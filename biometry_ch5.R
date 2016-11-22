@@ -161,8 +161,8 @@ library(extraDistr)
 #A few were easier to do with paper and pencil first (the ones involving basic probability).
 
 #Exercise 5.5
-#I think this is a binomial problem.
-#The organism is present or absent, assuming the person is diseased.  We want a false negative
+#The organism is present or absent in any given slide, assuming the person is diseased
+#(if the person has the d.  We want a false negative
 #<1% of the time.  The organism is visible in 20% of the time.
 #At first I thought this was a Bayesian problem but I don't see how to do it that way.
 #p=0.2 (organism visible), thus q=0.8 (organism visible but not present).
@@ -179,13 +179,6 @@ while (i > 0.01) {
      n=n+1
        0.8^21
    }
-
-#need to get table 5.1 but for 0 the power of p or q should be 0.01, not sure which.
-#Exercise 5.6
-#a
-#b
-#c
-#d
 
 #Exercise 5.10
 

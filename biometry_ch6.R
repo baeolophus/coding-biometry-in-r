@@ -89,8 +89,18 @@ qnorm(0.5*0.01)
 #This also explains it nicely down where it starts talking about qnorm.
 #https://cran.r-project.org/web/packages/tigerstats/vignettes/qnorm.html
 
-qnorm(.99,
-      lower.tail=FALSE)
+#Finally on pg. 98, they show calculation of standard deviates.
+#This is described in such a way that they seem to be z scores.
+#You can easily calculate this manually.
+z.score<-function(x){
+  (x-mean(x))/sd(x)
+}
+
+x<-c(1,2,3)
+z.score(x)
+#You can also use the scale() function.
+#https://www.r-bloggers.com/r-tutorial-series-centering-variables-and-generating-z-scores-with-the-scale-function/
+
 #Section 6.3
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 

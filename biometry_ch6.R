@@ -89,7 +89,7 @@ qnorm(0.5*0.01)
 #This also explains it nicely down where it starts talking about qnorm.
 #https://cran.r-project.org/web/packages/tigerstats/vignettes/qnorm.html
 
-#Finally on pg. 98, they show calculation of standard deviates.
+#On pg. 98, they show calculation of standard deviates.
 #This is described in such a way that they seem to be z scores.
 #You can easily calculate this manually.
 z.score<-function(x){
@@ -100,6 +100,21 @@ x<-c(1,2,3)
 z.score(x)
 #You can also use the scale() function.
 #https://www.r-bloggers.com/r-tutorial-series-centering-variables-and-generating-z-scores-with-the-scale-function/
+
+scale(x,
+      center=TRUE,
+      scale=TRUE)
+#help notes that scale=TRUE divides by the standard deviation when
+#center=TRUE, and center=TRUE substracts each number by the column mean.
+#This is the same thing we did in the z-score function.
+
+#Table 6.2 has expected frequencies for the normal distribution in column 2 for a sample of 1000 individuals.
+#We can generate this with dnorm().
+
+dnorm(seq(from=-5, to=5,
+          by=0.5),
+      mean=0,
+      sd=0.5)*1000
 
 #Section 6.3
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.

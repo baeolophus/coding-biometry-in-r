@@ -62,7 +62,8 @@ pnorm(-2)
 #Use diff as suggested here to get the area under the curve.
 diff(pnorm(0:1))
 #This works because it uses the cumulative function to calculate it.
-#If you go from -1 to 1 you get the 68.27% shown under Figure 6.2 and on page 96.
+#If you go from -1 to 1 you can add them up to get the 68.27% shown under Figure 6.2 and on page 96.
+sum(diff(pnorm(-1:1)))
 
 #To go the other way, i.e. to see where 50% of the items fall, you have to use qnorm.
 #Let's see what qnorm looks like.
@@ -109,12 +110,18 @@ scale(x,
 #This is the same thing we did in the z-score function.
 
 #Table 6.2 has expected frequencies for the normal distribution in column 2 for a sample of 1000 individuals.
-#We can generate this with dnorm().
+#We can generate this with pnorm() and thinking about what the class marks mean.
+#Because the class marks are separated by 0.5, we need to go 0.5 around each class mark and start at -5.25.
+boundaries<-seq(from=-5.25,
+                to=5.25,
+                by=0.5)
 
-dnorm(seq(from=-5, to=5,
-          by=0.5),
-      mean=0,
-      sd=0.5)*1000
+pnorm.results<-pnorm(boundaries)
+expected.freqs<-abs(diff(pnorm.results))
+cbind(boundaries[-length(boundaries)]+0.25,
+      #this takes the last entry off because we only need the lower bound for each class,
+      #and adds 0.25 to get the class mark.
+      round(expected.freqs*1000, 1))
 
 #Section 6.3
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.

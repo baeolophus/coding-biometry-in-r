@@ -51,12 +51,12 @@ curve(dnorm(x, mean=0, sd=1),
 
 pnorm(0, mean=0, sd=1)
 #Just adding one value gives you a point estimate.
-#50% will be found at zero.
+#50% will be found up to zero (the mean).
 
 #The other values shown in Figure 6.3
 pnorm(-1)
 pnorm(-2)
-#0 and 1 are the default values, so you can leave them out if you want in this case.
+#0 and 1 are the default values for mean and standard deviation, so you can leave them out if you want in this case.
 #If you add more than one, it will tell you the values.
 (pnorm(0:1))
 #Use diff as suggested here to get the area under the curve.
@@ -91,7 +91,7 @@ qnorm(0.5*0.01)
 #https://cran.r-project.org/web/packages/tigerstats/vignettes/qnorm.html
 
 #On pg. 98, they show calculation of standard deviates.
-#This is described in such a way that they seem to be z scores.
+#This is described in such a way that they seem to be z scores although they are never named as such in the book.
 #You can easily calculate this manually.
 z.score<-function(x){
   (x-mean(x))/sd(x)
@@ -109,7 +109,7 @@ scale(x,
 #center=TRUE, and center=TRUE substracts each number by the column mean.
 #This is the same thing we did in the z-score function.
 
-#Table 6.2 has expected frequencies for the normal distribution in column 2 for a sample of 1000 individuals.
+#Table 6.1 has expected frequencies for the normal distribution in column 2 for a sample of 1000 individuals.
 #We can generate this with pnorm() and thinking about what the class marks mean.
 #Because the class marks are separated by 0.5, we need to go 0.5 around each class mark and start at -5.25.
 boundaries<-seq(from=-5.25,
@@ -122,6 +122,7 @@ cbind(boundaries[-length(boundaries)]+0.25,
       #this takes the last entry off because we only need the lower bound for each class,
       #and adds 0.25 to get the class mark.
       round(expected.freqs*1000, 1))
+#Then you can have a look at the table and see that it gives the same results as column 2 in Table 6.1.
 
 #Section 6.3
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.

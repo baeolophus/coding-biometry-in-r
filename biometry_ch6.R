@@ -124,7 +124,52 @@ cbind(boundaries[-length(boundaries)]+0.25,
       round(expected.freqs*1000, 1))
 #Then you can have a look at the table and see that it gives the same results as column 2 in Table 6.1.
 
-#Section 6.3
+#Section 6.3 A Model for the Normal Distribution
+#This section describes what produces a normal distribution and
+#a heuristic showing how it is related to the binomial distribution.
+
+#Section 6.4 Applications of the Normal Distribution
+#This section describes how to do what we did to get Table 6.1,
+#but with a different set of data back from Section 4.2. [LINK]
+
+mean.bw<-109.9
+sd.bw<-13.593
+
+(sdeviate.bw<-(151-mean.bw)/sd.bw)
+
+pnorm(sdeviate.bw) #This value is more precise
+pnorm(3.02) #But the book uses this rounded value so we will too here.
+#We can do some of the calculations the book does on pp. 103-104.
+#Only a very few individuals are higher than 151 oz.
+1-pnorm(3.02)
+#If we want to look both directions we can double this number since the distribution is symmetrical.
+2*(1-pnorm(3.02))
+
+#By default, lower.tail=TRUE in pnorm.
+pnorm(3.02,
+      lower.tail=FALSE)
+#It is the same as our earlier value of
+1-pnorm(3.02)
+#Here is the default setting for comparison.
+pnorm(3.02,
+      lower.tail=TRUE)
+#This simply tells use which direction we want to look at,
+#the upper or lower tail of the distribution from our value of standard deviate.  
+
+#Section 6.5 Fitting a Normal Distribution to Observed Data
+
+#These data from Section 4.2.
+classmark<-seq(from=59.5, to=171.5, by=8)
+frequencies<-c(2,6,39,385,888,1729,2240,2007,1233,641,201,74,14,5,1)
+samplesize<-sum(frequencies) #This confirms that we entered the data correctly, and gets our sample size.
+#Multiply classmark and frequencies to get the sums for each class.
+classsums<-classmark*frequencies
+
+#To look at all this stuff together, combine it into a dataset.
+birthweights<-data.frame(cbind(classmark, frequencies, classsums))
+
+
+
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 
 #Then how to do them in R automatically.

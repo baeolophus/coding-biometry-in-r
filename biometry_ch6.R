@@ -158,7 +158,7 @@ pnorm(3.02,
 
 #Section 6.5 Fitting a Normal Distribution to Observed Data
 
-#These data from Section 4.2.
+#These data are from Section 4.2 [link].
 classmark<-seq(from=59.5, to=171.5, by=8)
 frequencies<-c(2,6,39,385,888,1729,2240,2007,1233,641,201,74,14,5,1)
 samplesize<-sum(frequencies) #This confirms that we entered the data correctly, and gets our sample size.

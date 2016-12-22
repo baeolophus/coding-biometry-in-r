@@ -167,8 +167,49 @@ classsums<-classmark*frequencies
 
 #To look at all this stuff together, combine it into a dataset.
 birthweights<-data.frame(cbind(classmark, frequencies, classsums))
+#the value for 171.5 is 0 instead of 0.1 as in book not sure why yet.
+
+birthweights<-rbind(birthweights, c(187.5, 0, 0))
 
 
+#On page 104, equation 6.2 is like equation 6.1 above but with sample size (n) and i (class intervals).
+normal.manual.applied<-function(mean, sd, n, i){
+  curve(((1/(sd*sqrt(2*pi)))*exp((-((x-mean)/sd)^2)/2))*n*i,
+        -4, 4, #go from -4 to +4 standard deviations.
+        add = FALSE,
+        ylab="freq",
+        xlab="Y",
+        type = "l")
+}
+
+normal.manual.applied(mean=0, sd=1, n=1000, i=0.5)
+#This gives the curve that Table 6.1 also has (same class intervals of 0.5, 1000 samples, and mean=0 with sd=1).
+#Let's do this with the birthweights data.
+
+birthweights.mean<-109.8996
+birthweights.sd<-13.5942
+
+#Like above we need the lower boundaries of the class marks.
+birthweights$boundaries<-birthweights$classmark-4
+
+birthweights$pnorm.results<-pnorm(birthweights$boundaries,
+                     mean=birthweights.mean,
+                     sd=birthweights.sd)
+
+#Take the difference of the first row minus the next row.
+#The last row will not have anything, which is why we needed to add the lower boundary of
+#the next class mark, which has a frequency of zero.and thus this generates a vector of length 14. 
+#We need 15, so we just add a zero on for the last difference as they do in Table 6.2
+birthweights$expected.freqs<-c(abs(diff(birthweights$pnorm.results)),0) #add a zero on for the last difference
+
+birthweights$expected.freqs.values<-round(birthweights$expected.freqs*samplesize, 2)
+
+
+
+#We can even add the plus and minus signs using ifelse and sign() to see in which direction the differences are.
+birthweights$departure.signs<-ifelse(sign(birthweights$frequencies-birthweights$expected.freqs.values)==-1,
+                                     "-", #if -1, then write "-"
+                                     "+") #else if not -1, write "+"
 
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 

@@ -130,7 +130,7 @@ cbind(boundaries[-length(boundaries)]+0.25,
 
 #Section 6.4 Applications of the Normal Distribution
 #This section describes how to do what we did to get Table 6.1,
-#but with a different set of data back from Section 4.2. [LINK]
+#but with a different set of data back from Section 4.2. [http://www.cmcurry.com/2014/07/using-r-to-work-through-sokal-and.html]
 
 mean.bw<-109.9
 sd.bw<-13.593
@@ -158,7 +158,7 @@ pnorm(3.02,
 
 #Section 6.5 Fitting a Normal Distribution to Observed Data
 
-#These data are from Section 4.2 [link].
+#These data are again from Section 4.2 [http://www.cmcurry.com/2014/07/using-r-to-work-through-sokal-and.html].
 classmark<-seq(from=59.5, to=171.5, by=8)
 frequencies<-c(2,6,39,385,888,1729,2240,2007,1233,641,201,74,14,5,1)
 samplesize<-sum(frequencies) #This confirms that we entered the data correctly, and gets our sample size.
@@ -167,9 +167,9 @@ classsums<-classmark*frequencies
 
 #To look at all this stuff together, combine it into a dataset.
 birthweights<-data.frame(cbind(classmark, frequencies, classsums))
-#the value for 171.5 is 0 instead of 0.1 as in book not sure why yet.
 
-birthweights<-rbind(birthweights, c(187.5, 0, 0))
+#Add on a row of the next class up which contains 0 individuals.
+(birthweights<-rbind(birthweights, c(179.5, 0, 0)))
 
 
 #On page 104, equation 6.2 is like equation 6.1 above but with sample size (n) and i (class intervals).
@@ -192,25 +192,38 @@ birthweights.sd<-13.5942
 #Like above we need the lower boundaries of the class marks.
 birthweights$boundaries<-birthweights$classmark-4
 
+#Get the expected frequencies for the class boundaries with the mean and sd of our dataset.
 birthweights$pnorm.results<-pnorm(birthweights$boundaries,
                      mean=birthweights.mean,
                      sd=birthweights.sd)
 
-#Take the difference of the first row minus the next row.
+#Then, take the difference of the first row minus the next row.
 #The last row will not have anything, which is why we needed to add the lower boundary of
-#the next class mark, which has a frequency of zero.and thus this generates a vector of length 14. 
+#the next class mark, which has a frequency of zero.  Thus, this calculation generates a vector of length 14. 
 #We need 15, so we just add a zero on for the last difference as they do in Table 6.2
 birthweights$expected.freqs<-c(abs(diff(birthweights$pnorm.results)),0) #add a zero on for the last difference
 
-birthweights$expected.freqs.values<-round(birthweights$expected.freqs*samplesize, 2)
-
-
+#Multipy the frequencies by the sample size to get the expected frequencies for a sample of this size.
+#Round as in the table.
+birthweights$expected.freqs.values<-round(birthweights$expected.freqs*samplesize, 1)
 
 #We can even add the plus and minus signs using ifelse and sign() to see in which direction the differences are.
 birthweights$departure.signs<-ifelse(sign(birthweights$frequencies-birthweights$expected.freqs.values)==-1,
                                      "-", #if -1, then write "-"
                                      "+") #else if not -1, write "+"
 
+#View the table to confirm it has the same data as table 6.2
+birthweights
+
+#Section 6.6 Skewness and Kurtosis
+
+#Box 6.1 shows how to compute g1 (skewness) and g2 (kurtosis) from a frequency distribution.
+#This is unlike to be how one would do it with your own table of data, 
+#but it is a helpful exercise in understanding how these moment statistics work and coding.
+
+
+
+#Section 6.7 Graphic Methods
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 
 #Then how to do them in R automatically.

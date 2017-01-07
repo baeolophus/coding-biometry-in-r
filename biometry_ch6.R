@@ -215,14 +215,36 @@ birthweights$departure.signs<-ifelse(sign(birthweights$frequencies-birthweights$
 #View the table to confirm it has the same data as table 6.2
 birthweights
 
+##blog up to here current
 #Section 6.6 Skewness and Kurtosis
 
 #Box 6.1 shows how to compute g1 (skewness) and g2 (kurtosis) from a frequency distribution.
 #This is unlike to be how one would do it with your own table of data, 
 #but it is a helpful exercise in understanding how these moment statistics work and coding.
+g1<-function(samplesize,
+             y,
+             sd){
+  (samplesize*sum(y^3))/
+    ((samplesize=1)*(samplesize-2)*sd^3)
+}
 
+#y is deviation from the mean (see pg 51, section 4.7)
+#Let's add it to birthweights.
 
+birthweights$y<-birthweights$classmark-birthweights.mean
+birthweights$yfreq<-birthweights$y*birthweights$frequencies
+summ<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]))
+Y<-summ/samplesize
+two<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-birthweights.mean+0.0001)^3) #0.0001 added to test for rounding as source of error
 
+three<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-birthweights.mean)^3)
+4 500 979
+#answer is not 4501097
+#^4 is also off, but ^2 and all other sums are exactly right.
+#adding abs() does not fix it and increases result by another order of magnitude, so is not the problem.
+#I think this must be caused by rounding.
+
+sum(frequencies*(coded.classmarks-(coded.summing/samplesize))^2)
 #Section 6.7 Graphic Methods
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 

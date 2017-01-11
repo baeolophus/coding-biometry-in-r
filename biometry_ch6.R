@@ -235,16 +235,27 @@ birthweights$y<-birthweights$classmark-birthweights.mean
 birthweights$yfreq<-birthweights$y*birthweights$frequencies
 summ<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]))
 Y<-summ/samplesize
-two<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-birthweights.mean+0.0001)^3) #0.0001 added to test for rounding as source of error
+two<-sum(birthweights[-16, "frequencies"]*(round((birthweights[-16, "classmark"]-birthweights.mean), digits=1000))^3) #0.0001 added to test for rounding as source of error
 
-three<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-birthweights.mean)^3)
+round((birthweights[-16, "classmark"]-birthweights.mean), digits=4)
+
+three<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-Y)^3)
+
+9465*three/(9464*9463*(13.5942^3))
+            #This answer is almost identical to book answer.  I wonder if their y3 number and y4 numbers are off somehow.
 4 500 979
-#answer is not 4501097
+#answer is not 4501097. off by 118.  Was a rounding problem.  Use Y instead of birthweights.mean.
 #^4 is also off, but ^2 and all other sums are exactly right.
 #adding abs() does not fix it and increases result by another order of magnitude, so is not the problem.
 #I think this must be caused by rounding.
 
 sum(frequencies*(coded.classmarks-(coded.summing/samplesize))^2)
+
+
+four<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-birthweights.mean)^4)
+ ((9466*9465*four)/(9464*9463*9462*(13.5942^4)))-((3*9464*9464)/(9463*9462))
+
+ymean<
 #Section 6.7 Graphic Methods
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 

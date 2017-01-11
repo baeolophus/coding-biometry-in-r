@@ -221,29 +221,24 @@ birthweights
 #Box 6.1 shows how to compute g1 (skewness) and g2 (kurtosis) from a frequency distribution.
 #This is unlike to be how one would do it with your own table of data, 
 #but it is a helpful exercise in understanding how these moment statistics work and coding.
-g1<-function(samplesize,
-             y,
-             sd){
-  (samplesize*sum(y^3))/
-    ((samplesize=1)*(samplesize-2)*sd^3)
-}
+g1<-(samplesize*sum(yfreq^3)/
+    ((samplesize-1)*(samplesize-2)*birthweights.sd^3)
 
-#y is deviation from the mean (see pg 51, section 4.7)
-#Let's add it to birthweights.
 
-birthweights$y<-birthweights$classmark-birthweights.mean
-birthweights$yfreq<-birthweights$y*birthweights$frequencies
-summ<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]))
-Y<-summ/samplesize
-two<-sum(birthweights[-16, "frequencies"]*(round((birthweights[-16, "classmark"]-birthweights.mean), digits=1000))^3) #0.0001 added to test for rounding as source of error
+mean.bw<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]))/samplesize
+yfreq<-birthweights[-16, "frequencies"]*
+           (
+             birthweights[-16, "classmark"]-mean.bw #This is deviation from the mean (see pg 51, section 4.7)
+             )
 
-round((birthweights[-16, "classmark"]-birthweights.mean), digits=4)
+g2<-(((samplesize+1)*samplesize*sum(yfreq^4))/
+  (samplesize-1)*(samplesize-2)*(samplesize-3)*birthweights.sd^4)-
+  (3*(samplesize-1)^2/((samplesize-2)*(samplesize-3)))
 
-three<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-Y)^3)
-
-9465*three/(9464*9463*(13.5942^3))
-            #This answer is almost identical to book answer.  I wonder if their y3 number and y4 numbers are off somehow.
-4 500 979
+#As an interesting side note, if you use the value of the mean given in the book
+birthweights.mean
+#which is rounded to four decimal places, the calculation for y3 is off by about 118.
+#Cubing (and raising to the power of 4) both were off.  
 #answer is not 4501097. off by 118.  Was a rounding problem.  Use Y instead of birthweights.mean.
 #^4 is also off, but ^2 and all other sums are exactly right.
 #adding abs() does not fix it and increases result by another order of magnitude, so is not the problem.

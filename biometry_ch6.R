@@ -221,19 +221,38 @@ birthweights
 #Box 6.1 shows how to compute g1 (skewness) and g2 (kurtosis) from a frequency distribution.
 #This is unlike to be how one would do it with your own table of data, 
 #but it is a helpful exercise in understanding how these moment statistics work and coding.
-g1<-(samplesize*sum(yfreq^3)/
-    ((samplesize-1)*(samplesize-2)*birthweights.sd^3)
-
-
 mean.bw<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]))/samplesize
-yfreq<-birthweights[-16, "frequencies"]*
-           (
-             birthweights[-16, "classmark"]-mean.bw #This is deviation from the mean (see pg 51, section 4.7)
-             )
+yfreq<-(
+    birthweights[-16, "classmark"]-mean.bw #This is deviation from the mean (see pg 51, section 4.7)
+  )
 
-g2<-(((samplesize+1)*samplesize*sum(yfreq^4))/
-  (samplesize-1)*(samplesize-2)*(samplesize-3)*birthweights.sd^4)-
-  (3*(samplesize-1)^2/((samplesize-2)*(samplesize-3)))
+(g1<-(
+        samplesize*
+        sum(birthweights[-16, "frequencies"]*yfreq^3)
+      )/
+    (
+      (samplesize-1)*(samplesize-2)*birthweights.sd^3
+      )
+)
+
+
+(g2<-(
+  (
+  (samplesize+1)*samplesize*sum(birthweights[-16, "frequencies"]*yfreq^4)
+   )/
+  (
+    (samplesize-1)*(samplesize-2)*(samplesize-3)*(birthweights.sd^4)
+    )
+  )-
+  (
+    (
+      3*(samplesize-1)^2
+      )/
+      (
+        (samplesize-2)*(samplesize-3)
+        )
+    )
+)
 
 #As an interesting side note, if you use the value of the mean given in the book
 birthweights.mean
@@ -244,13 +263,6 @@ birthweights.mean
 #adding abs() does not fix it and increases result by another order of magnitude, so is not the problem.
 #I think this must be caused by rounding.
 
-sum(frequencies*(coded.classmarks-(coded.summing/samplesize))^2)
-
-
-four<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]-birthweights.mean)^4)
- ((9466*9465*four)/(9464*9463*9462*(13.5942^4)))-((3*9464*9464)/(9463*9462))
-
-ymean<
 #Section 6.7 Graphic Methods
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 

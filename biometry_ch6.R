@@ -215,12 +215,13 @@ birthweights$departure.signs<-ifelse(sign(birthweights$frequencies-birthweights$
 #View the table to confirm it has the same data as table 6.2
 birthweights
 
-##blog up to here current
+
 #Section 6.6 Skewness and Kurtosis
 
 #Box 6.1 shows how to compute g1 (skewness) and g2 (kurtosis) from a frequency distribution.
 #This is unlike to be how one would do it with your own table of data, 
 #but it is a helpful exercise in understanding how these moment statistics work and coding.
+#This section assumes you have loaded the birthweights data from the last post. [link]
 mean.bw<-sum(birthweights[-16, "frequencies"]*(birthweights[-16, "classmark"]))/samplesize
 yfreq<-(
     birthweights[-16, "classmark"]-mean.bw #This is deviation from the mean (see pg 51, section 4.7)
@@ -254,14 +255,14 @@ yfreq<-(
     )
 )
 
-#As an interesting side note, if you use the value of the mean given in the book
+#As an interesting side note, if you use the value of the mean given in the book,
 birthweights.mean
-#which is rounded to four decimal places, the calculation for y3 is off by about 118.
-#Cubing (and raising to the power of 4) both were off.  
-#answer is not 4501097. off by 118.  Was a rounding problem.  Use Y instead of birthweights.mean.
-#^4 is also off, but ^2 and all other sums are exactly right.
-#adding abs() does not fix it and increases result by another order of magnitude, so is not the problem.
-#I think this must be caused by rounding.
+#which is rounded to four decimal places, the calculation for cubing 
+#(and raising to the power of 4) both were off.  The power of three one was off by 118!
+
+
+##blog up to here current
+
 
 #Section 6.7 Graphic Methods
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.

@@ -265,6 +265,16 @@ birthweights.mean
 
 
 #Section 6.7 Graphic Methods
+
+#Figure 6.5 shows the cumulative normal distribution again (as in Fig. 6.3),
+#with lines drawn down to equivalent deviates.
+curve(pnorm(x, mean=0, sd=1),
+      -4, 4,
+      lty="solid")
+#This is the same code as earlier in section 6.3.
+#You can draw lines, we'll just do the one for 0.7 cumulative.
+
+
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 
 #Then how to do them in R automatically.

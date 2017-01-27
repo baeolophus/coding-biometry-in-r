@@ -293,15 +293,78 @@ segments(x0 = qnorm(0.7),
          y1 = 0.7)
 
 #You can generalize this by making a function.
+fig6.5.function <- function (cumulativepercent,
+                             normaldeviateleft,
+                             normaldeviateright){
+  curve(pnorm(x, mean=0, sd=1),
+        normaldeviateleft,
+        normaldeviateright,
+        lty="solid")
+  
+  segments(x0 = qnorm(cumulativepercent),
+           y0 = 0,
+           x1 = qnorm(cumulativepercent),
+           y1 = cumulativepercent)
+  
+  segments(x0 = qnorm(cumulativepercent),
+           y0 = cumulativepercent,
+           x1 = normaldeviateleft,
+           y1 = cumulativepercent)
+}
 
-#function here.
+fig6.5.function(0.7,
+                -4,
+                4)
+
+
+fig6.5.function(0.3,
+                -4,
+                4)
+
 
 #On page 111, they begin discussing quantile-quantile plots (or QQ plots)
 
 #Make one manually.
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
+#I. routine computer processed samples.
+#First we need to generate a small dataset.
+fakehouseflydata <- data.frame(
+  "winglength" = rnorm(n = 1400,
+                       mean = 45.5,
+                       sd = 3.90)
+)
+  
+#Step 1.  order by increasing magnitude.
+library(dplyr)
 
-#Then how to do them in R automatically.
+ordered_fakehouseflydata <- fakehouseflydata %>%
+  arrange(winglength)
+
+ordered_fakehouseflydata$ranks <- rank(ordered_fakehouseflydata$winglength,
+                                       ties.method = "first")
+                                       
+                                       #Then how to do them in R automatically.
+rank(c(1,2,3,4,4,5),
+     ties.method = "first")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "last")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "average")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "random")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "min")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "max")
+
+#http://stats.stackexchange.com/questions/230226/how-to-manually-make-a-qq-plot-of-p-value-against-uniform-distribution
+#A different way, see how it compares.
+#More background http://onlinestatbook.com/2/advanced_graphs/q-q_plots.html
 
 #The rankits in box 6.2 are done this way.
 

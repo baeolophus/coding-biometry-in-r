@@ -273,8 +273,32 @@ curve(pnorm(x, mean=0, sd=1),
       lty="solid")
 #This is the same code as earlier in section 6.3.
 #You can draw lines, we'll just do the one for 0.7 cumulative.
+#Remember that qnorm gets us from the cumulative distribution to the value.
+#Here are some examples of qnorm again.
+qnorm(0.7)
+qnorm(0.3)
+qnorm(1) #As the text says, this is Inf(infinity)
 
+#We'll use segments() to add arbitrary lines to the plot we made above.
+#This code will not draw anything if you don't have a plot open.
 
+segments(x0 = qnorm(0.7),
+         y0 = 0,
+         x1 = qnorm(0.7),
+         y1 = 0.7)
+
+segments(x0 = qnorm(0.7),
+         y0 = 0.7,
+         x1 = -4,
+         y1 = 0.7)
+
+#You can generalize this by making a function.
+
+#function here.
+
+#On page 111, they begin discussing quantile-quantile plots (or QQ plots)
+
+#Make one manually.
 #Following box 6.2 to manually make a Q-Q plot to understand how they are built.
 
 #Then how to do them in R automatically.

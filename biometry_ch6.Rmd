@@ -1,0 +1,157 @@
+---
+title: "Biometry Ch. 6"
+author: "C.M. Curry"
+date: "January 30, 2017"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Section 6.7 Graphic Methods
+
+Figure 6.5 shows the cumulative normal distribution again (as in Fig. 6.3), with lines drawn down to equivalent deviates.
+```{r}
+cumulativecurve <- curve(pnorm(x, mean=0, sd=1),
+      -4, 4,
+      lty="solid")
+```
+
+This is the same code as earlier in [section 6.3](LINK HERE).
+You can draw lines, we'll just do the one for 0.7 cumulative.
+Remember that qnorm gets us from the cumulative distribution to the value.
+Here are some examples of qnorm again.
+```{r}
+qnorm(0.7)
+qnorm(0.3)
+qnorm(1) #As the text says, this is Inf(infinity)
+```
+We'll use segments() to add arbitrary lines to the plot we made above.
+This code will not draw anything if you don't have a plot open.
+
+```{r}
+plot(cumulativecurve,
+     type="l")
+segments(x0 = qnorm(0.7),
+         y0 = 0,
+         x1 = qnorm(0.7),
+         y1 = 0.7)
+
+segments(x0 = qnorm(0.7),
+         y0 = 0.7,
+         x1 = -4,
+         y1 = 0.7)
+```
+
+You can generalize this by making a function.
+
+```{r}
+fig6.5.function <- function (cumulativepercent,
+                             normaldeviateleft,
+                             normaldeviateright){
+  curve(pnorm(x, mean=0, sd=1),
+        normaldeviateleft,
+        normaldeviateright,
+        lty="solid")
+  
+  segments(x0 = qnorm(cumulativepercent),
+           y0 = 0,
+           x1 = qnorm(cumulativepercent),
+           y1 = cumulativepercent)
+  
+  segments(x0 = qnorm(cumulativepercent),
+           y0 = cumulativepercent,
+           x1 = normaldeviateleft,
+           y1 = cumulativepercent)
+}
+
+fig6.5.function(0.7,
+                -4,
+                4)
+
+
+fig6.5.function(0.3,
+                -4,
+                4)
+
+```
+
+On page 111, they begin discussing quantile-quantile plots (or QQ plots)
+
+Make one manually.
+Following box 6.2 to manually make a Q-Q plot to understand how they are built.
+I. routine computer processed samples.
+First we need to generate a small dataset.
+```{r}
+fakehouseflydata <- data.frame(
+  "winglength" = rnorm(n = 1400,
+                       mean = 45.5,
+                       sd = 3.90)
+)
+```
+Step 1.  order by increasing magnitude.
+
+```{r message = FALSE}
+library(dplyr)
+```
+```{r}
+ordered_fakehouseflydata <- fakehouseflydata %>%
+  arrange(winglength)
+```
+
+Step 2. Rank and compute p.
+```{r}
+ordered_fakehouseflydata$ranks <- rank(ordered_fakehouseflydata$winglength,
+                                       ties.method = "first")
+ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$ranks - 0.5)/length(ordered_fakehouseflydata$winglength)
+                                       
+```
+
+Then how to do them in R automatically.
+Which ranking method should you choose?
+
+```{r}
+rank(c(1,2,3,4,4,5),
+     ties.method = "first")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "last")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "average")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "random")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "min")
+
+rank(c(1,2,3,4,4,5),
+     ties.method = "max")
+```
+
+Step 3. Computed normal quantiles for each p.
+```{r}
+ordered_fakehouseflydata$normal_quantile <- qnorm(ordered_fakehouseflydata$p,
+                                                  mean = 0, 
+                                                  sd = 1)
+```
+
+Step 4. plot
+```{r}
+plot(y = ordered_fakehouseflydata$normal_quantile,
+     x = ordered_fakehouseflydata$winglength)
+```
+
+More guidance on making these from scratch [here](https://rpubs.com/markheckmann/45771)
+
+http://stats.stackexchange.com/questions/230226/how-to-manually-make-a-qq-plot-of-p-value-against-uniform-distribution
+A different way, see how it compares.
+More background http://onlinestatbook.com/2/advanced_graphs/q-q_plots.html
+
+The rankits in box 6.2 are done this way.
+
+ Look up Q-Q calculation in R to see how it deals with small sample sizes.
+ 
+ 

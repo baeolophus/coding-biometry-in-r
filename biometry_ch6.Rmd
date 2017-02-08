@@ -1,7 +1,5 @@
 ---
-title: "Biometry Ch. 6"
-author: "C.M. Curry"
-date: "January 30, 2017"
+title: "Biometry Ch. 6, section 6.7"
 output: html_document
 ---
 
@@ -9,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Section 6.7 Graphic Methods
+<h3>Section 6.7 Graphic Methods</h3>
 
 Figure 6.5 shows the cumulative normal distribution again (as in Fig. 6.3), with lines drawn down to equivalent deviates.
 ```{r}

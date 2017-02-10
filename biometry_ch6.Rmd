@@ -1,6 +1,6 @@
 ---
 title: "Biometry Ch. 6, section 6.7"
-output: html_document
+output: html_fragment
 ---
 
 ```{r, include=FALSE}
@@ -77,8 +77,7 @@ fig6.5.function(0.3,
 
 On page 111, they begin discussing quantile-quantile plots (or QQ plots)
 
-Make one manually.
-Following box 6.2 to manually make a Q-Q plot to understand how they are built.
+We'll make a Q-Q plot manually following box 6.2 to understand how they are built.
 I. routine computer processed samples.
 First we need to generate a small dataset.
 ```{r}
@@ -106,28 +105,40 @@ ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$ranks - 0.5)/length(orde
                                        
 ```
 
-Then how to do them in R automatically.
-Which ranking method should you choose?
+The rank() function has several methods to deal with ties.
+Why did we use "first"?  Well, first let's look at the ranking options for ties and the order() function
 
 ```{r}
-rank(c(1,2,3,4,4,5),
+rank(c(5,2,3,4,4,1),
      ties.method = "first")
 
-rank(c(1,2,3,4,4,5),
+rank(c(5,2,3,4,4,1),
      ties.method = "last")
 
-rank(c(1,2,3,4,4,5),
+rank(c(5,2,3,4,4,1),
      ties.method = "average")
 
-rank(c(1,2,3,4,4,5),
+rank(c(5,2,3,4,4,1),
      ties.method = "random")
 
-rank(c(1,2,3,4,4,5),
+rank(c(5,2,3,4,4,1),
      ties.method = "min")
 
-rank(c(1,2,3,4,4,5),
+rank(c(5,2,3,4,4,1),
      ties.method = "max")
 ```
+
+R appears to use two nested order() functions.  [This description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) points out that you can view the code.
+
+```{r}
+order(c(5,2,3,4,4,1))
+order(order(c(5,2,3,4,4,1)))
+```
+It looks like from step 2's description of how to deal with ties in i (the rank), we need something that will give us ties,
+so first, last, and random are out.
+
+However, [this description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) specifies that you don't want ties.  So there is more than one way to do this.
+http://stackoverflow.com/questions/2315601/understanding-the-order-function why do I need order(order) and not just one?  Why order and not rank?
 
 Step 3. Computed normal quantiles for each p.
 ```{r}
@@ -148,8 +159,14 @@ http://stats.stackexchange.com/questions/230226/how-to-manually-make-a-qq-plot-o
 A different way, see how it compares.
 More background http://onlinestatbook.com/2/advanced_graphs/q-q_plots.html
 
+```{r}
+stats:::qqnorm.default
+x <- qnorm(ppoints(n))[order(order(y))]
+```
+
 The rankits in box 6.2 are done this way.
 
  Look up Q-Q calculation in R to see how it deals with small sample sizes.
  
+Then how to do them in R automatically.
  

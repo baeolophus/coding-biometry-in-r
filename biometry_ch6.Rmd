@@ -109,36 +109,44 @@ The rank() function has several methods to deal with ties.
 Why did we use "first"?  Well, first let's look at the ranking options for ties and the order() function
 
 ```{r}
-rank(c(5,2,3,4,4,1),
+rank(c(4,3,6,2,2),
      ties.method = "first")
 
-rank(c(5,2,3,4,4,1),
+rank(c(4,3,6,2,2),
      ties.method = "last")
 
-rank(c(5,2,3,4,4,1),
+rank(c(4,3,6,2,2),
      ties.method = "average")
 
-rank(c(5,2,3,4,4,1),
+rank(c(4,3,6,2,2),
      ties.method = "random")
 
-rank(c(5,2,3,4,4,1),
+rank(c(4,3,6,2,2),
      ties.method = "min")
 
-rank(c(5,2,3,4,4,1),
+rank(c(4,3,6,2,2),
      ties.method = "max")
-```
-
-R appears to use two nested order() functions.  [This description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) points out that you can view the code.
-
-```{r}
-order(c(5,2,3,4,4,1))
-order(order(c(5,2,3,4,4,1)))
 ```
 It looks like from step 2's description of how to deal with ties in i (the rank), we need something that will give us ties,
 so first, last, and random are out.
 
+R appears to use two nested order() functions.  [This description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) points out that you can view the code.
+I was a bit baffled about why two order functions, but [this post](http://stackoverflow.com/questions/2315601/understanding-the-order-function) and [its linked quote](https://stat.ethz.ch/pipermail/r-help/2001-November/016802.html) helped me understand it. 
+The first order gives you the row indices that would put the numbers from smallest to largest (in ascending order).
+The nesting of order orders those new numbers (the 4, 5, 2, 1,3) by the same procedure.
+In other words, it gives the row number of the vector of row numbers that puts the original vector from smallest to largest.
+It is not intuitive why you would use this versus rank().  Rank just goes ahead and ranks from smallest to largest,
+so you can put that value directly into a column.
+Not sure if you can put the order(order()) into a column.
+
+```{r}
+order(c(4,3,6,2,2))
+order(order(c(4,3,6,2,2)))
+```
+
+
 However, [this description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) specifies that you don't want ties.  So there is more than one way to do this.
-http://stackoverflow.com/questions/2315601/understanding-the-order-function why do I need order(order) and not just one?  Why order and not rank?
+
 
 Step 3. Computed normal quantiles for each p.
 ```{r}

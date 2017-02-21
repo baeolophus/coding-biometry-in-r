@@ -98,15 +98,8 @@ ordered_fakehouseflydata <- fakehouseflydata %>%
 ```
 
 Step 2. Rank and compute p.
-```{r}
-ordered_fakehouseflydata$ranks <- rank(ordered_fakehouseflydata$winglength,
-                                       ties.method = "first")
-ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$ranks - 0.5)/length(ordered_fakehouseflydata$winglength)
-                                       
-```
-
 The rank() function has several methods to deal with ties.
-Why did we use "first"?  Well, first let's look at the ranking options for ties and the order() function
+First let's look at the ranking options for ties and the order() function
 
 ```{r}
 rank(c(4,3,6,2,2),
@@ -129,6 +122,47 @@ rank(c(4,3,6,2,2),
 ```
 It looks like from step 2's description of how to deal with ties in i (the rank), we need something that will give us ties,
 so first, last, and random are out.
+Let's do average.
+
+```{r}
+ordered_fakehouseflydata$i <- rank(ordered_fakehouseflydata$winglength,
+                                       ties.method = "average")
+ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$i - 0.5)/length(ordered_fakehouseflydata$winglength)
+                                       
+```
+
+
+
+Step 3. Computed normal quantiles for each p.
+```{r}
+ordered_fakehouseflydata$normal_quantile <- qnorm(ordered_fakehouseflydata$p,
+                                                  mean = 0, 
+                                                  sd = 1)
+```
+
+Step 4. Plot.
+You can use R's qqline to "draw the line with a ruler" as they suggest.  
+R does their opposite of the book so we have to use the datax=TRUE argument to get it to match.
+```{r}
+plot(y = ordered_fakehouseflydata$normal_quantile,
+     x = ordered_fakehouseflydata$winglength,
+     xlab = "Housefly wing lengths",
+     ylab = "Normal quantiles")
+qqline(y=ordered_fakehouseflydata$winglength,
+       datax=TRUE)
+
+qqnorm(y= ordered_fakehouseflydata$winglength,
+       datax=TRUE)
+qqline(y=ordered_fakehouseflydata$winglength,
+       datax=TRUE)
+```
+
+More guidance on making these from scratch [here](https://rpubs.com/markheckmann/45771)
+
+http://stats.stackexchange.com/questions/230226/how-to-manually-make-a-qq-plot-of-p-value-against-uniform-distribution
+A different way, see how it compares.
+More background http://onlinestatbook.com/2/advanced_graphs/q-q_plots.html
+
 
 R appears to use two nested order() functions.  [This description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) points out that you can view the code.
 I was a bit baffled about why two order functions, but [this post](http://stackoverflow.com/questions/2315601/understanding-the-order-function) and [its linked quote](https://stat.ethz.ch/pipermail/r-help/2001-November/016802.html) helped me understand it. 
@@ -147,25 +181,6 @@ order(order(c(4,3,6,2,2)))
 
 However, [this description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) specifies that you don't want ties.  So there is more than one way to do this.
 
-
-Step 3. Computed normal quantiles for each p.
-```{r}
-ordered_fakehouseflydata$normal_quantile <- qnorm(ordered_fakehouseflydata$p,
-                                                  mean = 0, 
-                                                  sd = 1)
-```
-
-Step 4. plot
-```{r}
-plot(y = ordered_fakehouseflydata$normal_quantile,
-     x = ordered_fakehouseflydata$winglength)
-```
-
-More guidance on making these from scratch [here](https://rpubs.com/markheckmann/45771)
-
-http://stats.stackexchange.com/questions/230226/how-to-manually-make-a-qq-plot-of-p-value-against-uniform-distribution
-A different way, see how it compares.
-More background http://onlinestatbook.com/2/advanced_graphs/q-q_plots.html
 
 ```{r}
 stats:::qqnorm.default

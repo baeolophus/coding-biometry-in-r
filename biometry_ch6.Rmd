@@ -121,8 +121,7 @@ rank(c(4,3,6,2,2),
      ties.method = "max")
 ```
 It looks like from step 2's description of how to deal with ties in i (the rank), we need something that will give us ties,
-so first, last, and random are out.
-Let's do average.
+so first, last, and random are out.  Let's do average.
 
 ```{r}
 ordered_fakehouseflydata$i <- rank(ordered_fakehouseflydata$winglength,
@@ -130,7 +129,7 @@ ordered_fakehouseflydata$i <- rank(ordered_fakehouseflydata$winglength,
 ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$i - 0.5)/length(ordered_fakehouseflydata$winglength)
                                        
 ```
-
+The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.
 
 
 Step 3. Computed normal quantiles for each p.
@@ -151,12 +150,16 @@ plot(y = ordered_fakehouseflydata$normal_quantile,
 qqline(y=ordered_fakehouseflydata$winglength,
        datax=TRUE)
 
-qqnorm(y= ordered_fakehouseflydata$winglength,
-       datax=TRUE)
-qqline(y=ordered_fakehouseflydata$winglength,
-       datax=TRUE)
-```
+qqnorm(y = ordered_fakehouseflydata$winglength,
+       datax = TRUE)
+qqline(y = ordered_fakehouseflydata$winglength,
+       datax = TRUE)
 
+quantile(x = ordered_fakehouseflydata$winglength,
+         probs = seq(0, 1, 0.1),
+         type = 5)
+```
+From this you can see that what the book calls normal quantiles, R calls theoretical quantiles.
 More guidance on making these from scratch [here](https://rpubs.com/markheckmann/45771)
 
 http://stats.stackexchange.com/questions/230226/how-to-manually-make-a-qq-plot-of-p-value-against-uniform-distribution
@@ -186,6 +189,9 @@ However, [this description of how to make a QQ plot manually](https://rpubs.com/
 stats:::qqnorm.default
 x <- qnorm(ppoints(n))[order(order(y))]
 ```
+Specifically, R uses qnorm().  Qnorm generates quantiles for the normal distribution.
+
+An example of how to interpret this is [here](http://data.library.virginia.edu/understanding-q-q-plots/)
 
 The rankits in box 6.2 are done this way.
 

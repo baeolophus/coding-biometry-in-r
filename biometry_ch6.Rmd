@@ -125,11 +125,12 @@ so first, last, and random are out.  Let's do average.
 
 ```{r}
 ordered_fakehouseflydata$i <- rank(ordered_fakehouseflydata$winglength,
-                                       ties.method = "average")
+                                       ties.method = "min")
 ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$i - 0.5)/length(ordered_fakehouseflydata$winglength)
                                        
 ```
-The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.
+The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.  These are [essentially percentiles](https://books.google.com/books?id=Xj3SBQAAQBAJ&pg=PA108&lpg=PA108&dq=p+%3D+(i+-1/2)/n+quantile&source=bl&ots=w5-cCqQMJE&sig=Ahu8gN1tFHPMCERhqghUv0qjnaI&hl=en&sa=X&ved=0ahUKEwijsoabpLPSAhUBHWMKHWrQAmsQ6AEIJTAC#v=onepage&q=p%20%3D%20(i%20-1%2F2)%2Fn%20quantile&f=false) if you multiplied them by 100.
+Check out quantile().  Its type 5 is equivalent to this equation and is estimates of going backwards.  I.e., we're calculating the probs already (p) for the numbers we have.  
 
 
 Step 3. Computed normal quantiles for each p.
@@ -141,11 +142,11 @@ ordered_fakehouseflydata$normal_quantile <- qnorm(ordered_fakehouseflydata$p,
 
 Step 4. Plot.
 You can use R's qqline to "draw the line with a ruler" as they suggest.  
-R does their opposite of the book so we have to use the datax=TRUE argument to get it to match.
+R uses the opposite axes compared to the book so we have to use the datax=TRUE argument to get it to match.
 ```{r}
 plot(y = ordered_fakehouseflydata$normal_quantile,
      x = ordered_fakehouseflydata$winglength,
-     xlab = "Housefly wing lengths",
+     xlab = "Housefly wing lengths (Y)",
      ylab = "Normal quantiles")
 qqline(y=ordered_fakehouseflydata$winglength,
        datax=TRUE)
@@ -155,9 +156,19 @@ qqnorm(y = ordered_fakehouseflydata$winglength,
 qqline(y = ordered_fakehouseflydata$winglength,
        datax = TRUE)
 
-quantile(x = ordered_fakehouseflydata$winglength,
-         probs = seq(0, 1, 0.1),
+ordered_fakehouseflydata$quantilei <- quantile(x = ordered_fakehouseflydata$winglength,
+         probs = ordered_fakehouseflydata$i/length(ordered_fakehouseflydata$winglength),
          type = 5)
+
+ordered_fakehouseflydata$normal_quantilei <- qnorm(ordered_fakehouseflydata$quantilei,
+                                                  mean = 0, 
+                                                  sd = 1)
+plot(y = ordered_fakehouseflydata$normal_quantilei,
+     x = ordered_fakehouseflydata$winglength,
+     xlab = "Housefly wing lengths (Y)",
+     ylab = "Normal quantiles")
+qqline(y=ordered_fakehouseflydata$winglength,
+       datax=TRUE)
 ```
 From this you can see that what the book calls normal quantiles, R calls theoretical quantiles.
 More guidance on making these from scratch [here](https://rpubs.com/markheckmann/45771)

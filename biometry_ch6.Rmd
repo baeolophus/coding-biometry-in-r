@@ -129,6 +129,7 @@ ordered_fakehouseflydata$i <- rank(ordered_fakehouseflydata$winglength,
 ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$i - 0.5)/length(ordered_fakehouseflydata$winglength)
                                        
 ```
+
 The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.  These are [essentially percentiles](https://books.google.com/books?id=Xj3SBQAAQBAJ&pg=PA108&lpg=PA108&dq=p+%3D+(i+-1/2)/n+quantile&source=bl&ots=w5-cCqQMJE&sig=Ahu8gN1tFHPMCERhqghUv0qjnaI&hl=en&sa=X&ved=0ahUKEwijsoabpLPSAhUBHWMKHWrQAmsQ6AEIJTAC#v=onepage&q=p%20%3D%20(i%20-1%2F2)%2Fn%20quantile&f=false) if you multiplied them by 100.
 Check out quantile().  Its type 5 is equivalent to this equation and is estimates of going backwards.  I.e., we're calculating the probs already (p) for the numbers we have.  
 

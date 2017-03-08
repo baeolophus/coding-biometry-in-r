@@ -23,7 +23,9 @@ Here are some examples of qnorm again.
 ```{r}
 qnorm(0.7)
 qnorm(0.3)
-qnorm(1) #As the text says, this is Inf(infinity)
+qnorm(1)    #As the text says, this is Inf(infinity)
+qnorm(0)    #Ditto
+qnorm(-0.7) #Remember because you are inputting a vector of probabilities it must be between 0 and 1.
 ```
 We'll use segments() to add arbitrary lines to the plot we made above.
 This code will not draw anything if you don't have a plot open.
@@ -81,6 +83,7 @@ We'll make a Q-Q plot manually following box 6.2 to understand how they are buil
 I. routine computer processed samples.
 First we need to generate a small dataset.
 ```{r}
+set.seed(24652498)  #set the random seed so we get the same results each time.
 fakehouseflydata <- data.frame(
   "winglength" = rnorm(n = 1400,
                        mean = 45.5,
@@ -130,16 +133,15 @@ ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$i - 0.5)/length(ordered_
                                        
 ```
 
-The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.  These are [percentiles](https://books.google.com/books?id=Xj3SBQAAQBAJ&pg=PA108&lpg=PA108&dq=p+%3D+(i+-1/2)/n+quantile&source=bl&ots=w5-cCqQMJE&sig=Ahu8gN1tFHPMCERhqghUv0qjnaI&hl=en&sa=X&ved=0ahUKEwijsoabpLPSAhUBHWMKHWrQAmsQ6AEIJTAC#v=onepage&q=p%20%3D%20(i%20-1%2F2)%2Fn%20quantile&f=false) if you multiplied them by 100.
+The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.  These are [percentiles](https://books.google.com/books?id=Xj3SBQAAQBAJ&pg=PA108&lpg=PA108&dq=p+%3D+(i+-1/2)/n+quantile&source=bl&ots=w5-cCqQMJE&sig=Ahu8gN1tFHPMCERhqghUv0qjnaI&hl=en&sa=X&ved=0ahUKEwijsoabpLPSAhUBHWMKHWrQAmsQ6AEIJTAC#v=onepage&q=p%20%3D%20(i%20-1%2F2)%2Fn%20quantile&f=false) if you multiplied them by 100.  R also has a quantile() function to make sample quantiles (aka percentiles at various probabilities).  Type 5 uses the same equation as we did to make the variable "p".  The difference appears to be that quantile() tells you what values exist at given percentiles (the variables you put into the probs argument.)  In our case, we are calculating in what percentile the sample is.  So we wouldn't use quantile() in this case despite its appealing name relative to step 3 below.
 
-R also has a quantile() function to make sample quantiles.  Type 5 uses the same equation as we did to make the variable "p".  The difference appears to be that quantile() tells you what values exist at given percentiles (the variables you put into the probs argument.)  In our case, we are calculating what percentile the sample is.  So we wouldn't use quantile() in this case despite its appealing name relative to step 3 below.
 ```{r}
 quantile(x = ordered_fakehouseflydata$winglength,
          type = 5)
 ```
 
 
-Step 3. Computed normal quantiles for each p.
+Step 3. Computed normal quantiles for each p.  Here we take the "p" column and input it into qnorm.  qnorm() asks for a vector of probabilities (see ?qnorm).  But our "p" is calculated in a way like the sample quantiles/percentiles in quantile().  [Here is an explanation.](http://stats.stackexchange.com/questions/132952/is-calculating-a-percentile-the-same-as-evaluating-a-cumulative-density-function) and maybe [this one too](https://www.fs.fed.us/rm/pubs_int/int_gtr367/12comp.html)
 ```{r}
 ordered_fakehouseflydata$normal_quantile <- qnorm(ordered_fakehouseflydata$p,
                                                   mean = 0, 

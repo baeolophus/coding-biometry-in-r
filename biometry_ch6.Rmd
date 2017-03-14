@@ -133,7 +133,7 @@ ordered_fakehouseflydata$p <- (ordered_fakehouseflydata$i - 0.5)/length(ordered_
                                        
 ```
 
-The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.  These are [percentiles](https://books.google.com/books?id=Xj3SBQAAQBAJ&pg=PA108&lpg=PA108&dq=p+%3D+(i+-1/2)/n+quantile&source=bl&ots=w5-cCqQMJE&sig=Ahu8gN1tFHPMCERhqghUv0qjnaI&hl=en&sa=X&ved=0ahUKEwijsoabpLPSAhUBHWMKHWrQAmsQ6AEIJTAC#v=onepage&q=p%20%3D%20(i%20-1%2F2)%2Fn%20quantile&f=false) if you multiplied them by 100.  R also has a quantile() function to make sample quantiles (aka percentiles at various probabilities).  Type 5 uses the same equation as we did to make the variable "p".  The difference appears to be that quantile() tells you what values exist at given percentiles (the variables you put into the probs argument.)  In our case, we are calculating in what percentile the sample is.  So we wouldn't use quantile() in this case despite its appealing name relative to step 3 below.
+The rank order divided by n (sample size) will result in the first observation being small (1-1/2)/n but above 0 and the last observation being closer to 1.  These are [percentiles](https://books.google.com/books?id=Xj3SBQAAQBAJ&pg=PA108&lpg=PA108&dq=p+%3D+(i+-1/2)/n+quantile&source=bl&ots=w5-cCqQMJE&sig=Ahu8gN1tFHPMCERhqghUv0qjnaI&hl=en&sa=X&ved=0ahUKEwijsoabpLPSAhUBHWMKHWrQAmsQ6AEIJTAC#v=onepage&q=p%20%3D%20(i%20-1%2F2)%2Fn%20quantile&f=false) if you multiplied them by 100.  R also has a quantile() function to make sample quantiles (aka percentiles at various probabilities).  Type 5 uses the same equation as we did to make the variable "p".  You can see what it does below.  The difference appears to be that quantile() tells you what values exist at given percentiles (the variables you put into the probs argument.)  In our case, we are calculating in what percentile the sample is.  So we wouldn't use quantile() in this case despite its appealing name relative to step 3 below.
 
 ```{r}
 quantile(x = ordered_fakehouseflydata$winglength,
@@ -141,7 +141,7 @@ quantile(x = ordered_fakehouseflydata$winglength,
 ```
 
 
-Step 3. Computed normal quantiles for each p.  Here we take the "p" column and input it into qnorm.  qnorm() asks for a vector of probabilities (see ?qnorm).  But our "p" is calculated in a way like the sample quantiles/percentiles in quantile().  [Here is an explanation.](http://stats.stackexchange.com/questions/132952/is-calculating-a-percentile-the-same-as-evaluating-a-cumulative-density-function) and maybe [this one too](https://www.fs.fed.us/rm/pubs_int/int_gtr367/12comp.html)
+Step 3. Computed normal quantiles for each p.  Here we take the "p" column and input it into qnorm.  qnorm() asks for a vector of probabilities (see ?qnorm).  But our "p" is calculated in a way like the sample quantiles/percentiles in quantile().  [Here is an explanation.](http://stats.stackexchange.com/questions/132952/is-calculating-a-percentile-the-same-as-evaluating-a-cumulative-density-function) and [this one too](https://www.fs.fed.us/rm/pubs_int/int_gtr367/12comp.html)
 ```{r}
 ordered_fakehouseflydata$normal_quantile <- qnorm(ordered_fakehouseflydata$p,
                                                   mean = 0, 
@@ -186,7 +186,7 @@ R can do this all for you automatically, as you can see from using qqnorm and qq
 First, R appears to use two nested order() functions instead of rank.  [This description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) points out that you can view the code.
 I was a bit baffled about why two order functions, but [this post](http://stackoverflow.com/questions/2315601/understanding-the-order-function) and [its linked quote](https://stat.ethz.ch/pipermail/r-help/2001-November/016802.html) helped me understand it. 
 The first order gives you the row indices that would put the numbers from smallest to largest (in ascending order).
-The nesting of order orders those new numbers (the 4, 5, 2, 1,3) by the same procedure.  Order's result is always row indices.  Rank's result is always what rank the value is (1, 2, 3, etc), not its row index.  [Rank is equivalent to order(order).](http://stackoverflow.com/questions/38968911/why-does-orderorderx-equal-rankx-in-r?noredirect=1&lq=1)
+The nesting of order orders those new numbers (the 4, 5, 2, 1,3) by the same procedure.  Order's result is always row indices.  Rank's result is always what rank the value is (1, 2, 3, etc), not its row index.  [Rank is equivalent to order(order).](http://stackoverflow.com/questions/38968911/why-does-orderorderx-equal-rankx-in-r?noredirect=1&lq=1)  Essentially when you order the order indices (i.e. get their row indices) it gives you the rank.
 
 
 ```{r}
@@ -205,6 +205,10 @@ x <- qnorm(ppoints(n))[order(order(y))]
 Specifically, R uses qnorm().  Qnorm generates quantiles for the normal distribution.
 
 An example of how to interpret this is [here](http://data.library.virginia.edu/understanding-q-q-plots/)
+
+Part II of box 6.2 shows up to do a QQ plot with a frequency distribution.  The main difference here is in the calculations.  If we wanted to make a QQ plot in R, we just take the class marks and do qqplot() on them.  When calculating by hand, we need the cumulative frequencies. Let's [add up the frequency (f) column](http://stackoverflow.com/questions/33038240/add-row-value-to-previous-row-value-in-r).
+
+df1$newColumn <- with(df1, c(f[1],f[-1]+f[-nrow(df1)]))
 
 The rankits in box 6.2 are done this way.
 

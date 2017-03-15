@@ -164,14 +164,6 @@ qqnorm(y = ordered_fakehouseflydata$winglength,
 qqline(y = ordered_fakehouseflydata$winglength,
        datax = TRUE)
 
-
-
-plot(y = ordered_fakehouseflydata$normal_quantilei,
-     x = ordered_fakehouseflydata$winglength,
-     xlab = "Housefly wing lengths (Y)",
-     ylab = "Normal quantiles")
-qqline(y=ordered_fakehouseflydata$winglength,
-       datax=TRUE)
 ```
 From this you can see that what the book calls normal quantiles, R calls theoretical quantiles.
 More guidance on making these from scratch [here](https://rpubs.com/markheckmann/45771)
@@ -195,7 +187,7 @@ order(order(c(4,3,6,2,2)))
 ```
 
 
-Additionally, [this description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) specifies that you don't want ties.  So there is more than one way to do this [see also the many ways to calculate quantiles in the quantile() function)].
+Additionally, [this description of how to make a QQ plot manually](https://rpubs.com/markheckmann/45771) specifies that you don't want ties.  So there is more than one way to do this (see also the many ways to calculate quantiles in the quantile function).
 
 
 ```{r}
@@ -206,12 +198,55 @@ Specifically, R uses qnorm().  Qnorm generates quantiles for the normal distribu
 
 An example of how to interpret this is [here](http://data.library.virginia.edu/understanding-q-q-plots/)
 
-Part II of box 6.2 shows up to do a QQ plot with a frequency distribution.  The main difference here is in the calculations.  If we wanted to make a QQ plot in R, we just take the class marks and do qqplot() on them.  When calculating by hand, we need the cumulative frequencies. Let's [add up the frequency (f) column](http://stackoverflow.com/questions/33038240/add-row-value-to-previous-row-value-in-r).
+Part II of box 6.2 shows up to do a QQ plot with a frequency distribution.  The main difference here is in the calculations.  If we wanted to make a QQ plot in R, we just take the class marks and do qqplot() on them.  When calculating by hand, we need the cumulative frequencies, which we calculate below.
 
-df1$newColumn <- with(df1, c(f[1],f[-1]+f[-nrow(df1)]))
+```{r}
+classmark<-seq(from=59.5, to=171.5, by=8)
+frequencies<-c(2,6,39,385,888,1729,2240,2007,1233,641,201,74,14,5,1)
+samplesize<-sum(frequencies) #This confirms that we entered the data correctly, and gets our sample size.
+#Multiply classmark and frequencies to get the sums for each class.
+classsums<-classmark*frequencies
+
+#To look at all this stuff together, combine it into a dataset.
+birthweights<-data.frame(cbind(classmark, frequencies, classsums))
+#Get the cumulative sum through the rows.
+birthweights$cfreq <- cumsum(birthweights$frequencies)
+```
+
+Then use the p/percentile equation and get your normal quantiles.
+```{r}
+birthweights$p <- (birthweights$cfreq-0.5)/max(birthweights$cfreq)
+#Here we divide by max() instead of length() because max() gives you the number of samples (since we have frequencies).
+#Then go on as before!
+birthweights$normal_quantile <- qnorm(birthweights$p,
+                                                  mean = 0, 
+                                                  sd = 1)
+#not sure why the plot is off.
+
+plot(y = birthweights$normal_quantile,
+     x = birthweights$classmark,
+     xlab = "Birthweights (Y)",
+     ylab = "Normal quantiles = book's normal equivalent deviates",
+     ylim = c(-2, 2))
+qqline(y = birthweights$classmark,
+       datax=TRUE)
+
+qqnorm(y = birthweights$classmark,
+       datax = TRUE)
+qqline(y = birthweights$classmark,
+       datax = TRUE)
+```
 
 The rankits in box 6.2 are done this way.
 
+
+```{r}
+aphid.femur<-c(3.8,3.6,4.3,3.5,4.3,
+               3.3,4.3,3.9,4.3,3.8,
+               3.9,4.4,3.8,4.7,3.6,
+               4.1,4.4,4.5,3.6,3.8,
+               4.4,4.1,3.6,4.2,3.9)
+```
  Look up Q-Q calculation in R to see how it deals with small sample sizes.
  
 Then how to do them in R automatically.
